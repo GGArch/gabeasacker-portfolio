@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabe Asacker | Architecture Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root{--desk-1:#0d0d0d;--desk-2:#151413;--desk-3:#1a1918;--paper-light:#f5f2ed;--paper-cream:#ebe6df;--color-warm:#d9c4b0;--color-cool:#b8c4d4;--color-accent:#c9d4b8;--color-pop:#ff6b35;--side-width:30%;--center-width:40%;--narrative-width:420px;--font-sans:'Space Grotesk',-apple-system,sans-serif;--font-serif:'Instrument Serif',Georgia,serif}
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font-sans);background:var(--desk-2);color:#1a1a1a;line-height:1.6;overflow-x:hidden}
+        
+        /* STUDIO BACKGROUNDS - VERY SUBTLE */
+        .studio-bg-left{position:fixed;top:0;left:0;width:var(--side-width);height:100vh;z-index:-2;background:linear-gradient(180deg,rgba(10,10,10,.92) 0%,rgba(15,14,13,.88) 50%,rgba(10,10,10,.92) 100%),url('Background-image/BG_COL_2.png') center/cover}
+        .studio-bg-right{position:fixed;top:0;right:0;width:var(--side-width);height:100vh;z-index:-2;background:linear-gradient(180deg,rgba(10,10,10,.92) 0%,rgba(15,14,13,.88) 50%,rgba(10,10,10,.92) 100%),url('Background-image/BG_COL_4.png') center/cover}
+        body::before{content:'';position:fixed;top:0;left:var(--side-width);width:var(--center-width);height:100vh;background:linear-gradient(180deg,var(--paper-light) 0%,var(--paper-cream) 50%,var(--paper-light) 100%);z-index:-1}
+        body::after{content:'';position:fixed;top:0;left:0;right:0;height:100vh;background:linear-gradient(to right,transparent 0%,transparent calc(var(--side-width) - 40px),rgba(0,0,0,.25) var(--side-width),transparent calc(var(--side-width) + 15px),transparent calc(70% - 15px),rgba(0,0,0,.25) 70%,transparent calc(70% + 40px),transparent 100%);z-index:1;pointer-events:none}
+        
+        /* NAVIGATION */
+        .nav{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;z-index:1000;mix-blend-mode:difference}
+        .nav-logo{font-size:1.1rem;font-weight:700;letter-spacing:.15em;color:#fff}
+        .nav-links{display:flex;gap:2rem}
+        .nav-links a{font-size:.7rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#fff;text-decoration:none;opacity:.6;transition:opacity .3s}
+        .nav-links a:hover{opacity:1}
+        .nav-year{font-size:1rem;font-weight:600;color:#fff;opacity:.9;letter-spacing:.1em}
+        
+        /* HERO */
+        .hero{min-height:75vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4rem 2rem;background:linear-gradient(135deg,rgba(13,13,13,.92) 0%,rgba(26,25,24,.88) 50%,rgba(21,20,19,.92) 100%),url('Background-image/BG_COL_5.png') center/cover;color:#fff;position:relative;z-index:10}
+        .hero-sub{font-size:.75rem;letter-spacing:.35em;text-transform:uppercase;opacity:.45;margin-bottom:.5rem}
+        .hero-title{font-family:var(--font-serif);font-size:clamp(3.5rem,12vw,9rem);font-weight:400;line-height:.9;margin-bottom:1.5rem}
+        .hero-line{display:block}
+        .hero-school{font-size:.65rem;letter-spacing:.2em;opacity:.3;line-height:1.8}
+        
+        /* CHAPTERS */
+        .journey{position:relative;z-index:5}
+        .chapter{position:relative;padding:0}
+        
+        /* SIDE IMAGES - Natural aspect ratios, scattered throughout */
+        .side-images{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:visible;z-index:2}
+        .side-img{position:absolute;pointer-events:auto;cursor:pointer;transition:transform .3s ease,z-index 0s}
+        .side-img img{max-width:100%;height:auto;border-radius:4px;box-shadow:0 10px 35px rgba(0,0,0,.4)}
+        .side-img:hover{z-index:100!important;transform:scale(1.08) rotate(0deg)!important}
+        .side-img:hover img{box-shadow:0 25px 60px rgba(0,0,0,.5)}
+        /* Size classes - width only, height auto */
+        .side-img.w-sm{width:160px}
+        .side-img.w-md{width:220px}
+        .side-img.w-lg{width:280px}
+        .side-img.w-xl{width:340px}
+        
+        /* COLOR BLOCKS */
+        .color-block{padding:1.5rem 0;margin:0;position:relative}
+        .color-block::before{content:'';position:absolute;left:var(--side-width);width:var(--center-width);top:0;bottom:0;z-index:0}
+        .color-warm::before{background:var(--color-warm)}
+        .color-cool::before{background:var(--color-cool)}
+        .color-accent::before{background:var(--color-accent)}
+        
+        /* NARRATIVE TEXT */
+        .narrative{max-width:var(--narrative-width);margin:0 auto;padding:1.5rem 2rem;position:relative;z-index:10}
+        .year-marker{display:block;font-size:5rem;font-weight:700;line-height:1;color:rgba(0,0,0,.04);margin-bottom:-.75rem}
+        .narrative h2{font-family:var(--font-serif);font-size:2.4rem;font-weight:400;margin-bottom:.2rem}
+        .narrative .period{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:#777;margin-bottom:1rem}
+        .narrative p{font-size:.88rem;line-height:1.75;color:#4a4a4a;margin-bottom:.8rem}
+        
+        /* INLINE IMAGE */
+        .inline-image{max-width:380px;margin:1rem auto;position:relative;z-index:10}
+        .inline-image img{width:100%;height:auto;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+        
+        /* FOOTER */
+        .footer{background:linear-gradient(135deg,rgba(13,13,13,.95) 0%,rgba(21,20,19,.95) 100%),url('Background-image/BG_COL_3.png') center/cover;color:#fff;padding:5rem 2rem;text-align:center;position:relative;z-index:10}
+        .footer h2{font-family:var(--font-serif);font-size:2.5rem;font-weight:400;margin-bottom:1.5rem}
+        .footer-links{display:flex;gap:2.5rem;justify-content:center;margin-bottom:2rem}
+        .footer-links a{color:#fff;text-decoration:none;font-size:.85rem;letter-spacing:.1em;opacity:.6;transition:all .3s}
+        .footer-links a:hover{opacity:1;color:var(--color-pop)}
+        .copyright{font-size:.7rem;opacity:.3}
+        
+        /* LIGHTBOX */
+        .lightbox{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+        .lightbox.active{opacity:1;visibility:visible}
+        .lightbox-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.94);cursor:pointer}
+        .lightbox-content{position:relative;max-width:92vw;max-height:92vh;transform:scale(.92);transition:transform .4s}
+        .lightbox.active .lightbox-content{transform:scale(1)}
+        .lightbox-content img{max-width:100%;max-height:92vh;object-fit:contain;border-radius:4px;box-shadow:0 25px 80px rgba(0,0,0,.6)}
+        
+        /* RESPONSIVE */
+        @media(max-width:1300px){:root{--side-width:26%;--center-width:48%}}
+        @media(max-width:1000px){
+            .studio-bg-left,.studio-bg-right,body::before,body::after{display:none}
+            body{background:var(--paper-cream)}
+            .chapter{padding:1rem 0}
+            .side-images{display:none}
+            .color-block::before{left:5%;width:90%;border-radius:12px}
+            .nav-links{display:none}
+        }
+        @media(max-width:600px){
+            .hero{min-height:60vh}
+            .hero-title{font-size:3rem}
+            .narrative{padding:1rem}
+            .narrative h2{font-size:1.8rem}
+            .year-marker{font-size:3.5rem}
+        }
+    </style>
+</head>
+<body>
+    <div class="studio-bg-left"></div>
+    <div class="studio-bg-right"></div>
+    <nav class="nav">
+        <div class="nav-logo">GGA</div>
+        <div class="nav-links"><a href="#origins">Origins</a><a href="#midpoint">Midpoint</a><a href="#current">Current</a></div>
+        <span class="nav-year">2017</span>
+    </nav>
+    <header class="hero" id="top">
+        <p class="hero-sub">Architecture Portfolio</p>
+        <h1 class="hero-title"><span class="hero-line">Gabriel</span><span class="hero-line">Asacker</span></h1>
+        <p class="hero-school">Wentworth Institute of Technology<br>Bachelor of Science in Architecture<br>2021 – 2026</p>
+    </header>
+    <main class="journey">
+
+        <!-- SECTION 00: ORIGINS -->
+        <section class="chapter" data-year="2017" id="origins">
+            <div class="side-images">
+                <!-- LEFT COLUMN - evenly distributed from top to bottom -->
+                <div class="side-img w-lg" style="left:1%;top:2%;transform:rotate(-3deg)"><img src="00/SEC-00-LF-BCK-01.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:18%;transform:rotate(2deg)"><img src="00/SEC-00-LF-SH-01.jpg" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:35%;transform:rotate(-2deg)"><img src="00/SEC-00-LF-BCK-02.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:52%;transform:rotate(3deg)"><img src="00/SEC-00-LF-SH-02.jpg" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:70%;transform:rotate(-1deg)"><img src="00/SEC-00-LF-BCK-03.jpg" alt=""></div>
+                <!-- RIGHT COLUMN -->
+                <div class="side-img w-md" style="right:4%;top:5%;transform:rotate(3deg)"><img src="00/SEC-00-RF-BCK-01.jpg" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:22%;transform:rotate(-2deg)"><img src="00/SEC-00-RF-SH-01.jpg" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:42%;transform:rotate(2deg)"><img src="00/SEC-00-RF-BCK-02.jpg" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:62%;transform:rotate(-3deg)"><img src="00/SEC-00-RF-BCK-03.jpg" alt=""></div>
+            </div>
+            <div class="color-block color-warm">
+                <div class="narrative">
+                    <span class="year-marker">00</span>
+                    <h2>Origins</h2>
+                    <p class="period">HIGH SCHOOL 2017–2021 | BVT DRAFTING & DESIGN</p>
+                    <p>My interest in architecture started early, with books about skyscrapers and countless LEGO sets of architectural landmarks founded my early fascination. When it came to choosing a high school, the decision felt natural. I applied to a vocational school to pursue this passion in any format I could. Looking back, this choice opened doors I didn't even realize existed.</p>
+                    <p>The vocational program gave me something most high schools don't offer: mechanical and architectural drafting knowledge paired with construction and machining experience. Learning to watch the entire process, from what we drew on computers to seeing those items and assemblies printed, milled, or constructed. This kept me in tune with construction terminology, materials, and trades that are so crucial in any design process. A hands-on approach paired with this level of design thinking created the foundation of learning and curiosity that was necessary to shape what I wanted to study in college. What stood out most was watching the upperclassmen graduate. Many of them headed to Wentworth to study architecture. I hadn't heard of Wentworth before, but seeing so many talented students from my program choose the same school made it clear they valued what was being taught there. That pattern would eventually point my path.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/00-origins.jpg" alt="Origins"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 01: FOUNDATION -->
+        <section class="chapter" data-year="2021">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:2%;top:3%;transform:rotate(2deg)"><img src="01/SEC-01-LF-BCK-01.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:18%;transform:rotate(-3deg)"><img src="01/SEC-01-LF-SH-01.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:35%;transform:rotate(1deg)"><img src="01/SEC-01-LF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:52%;transform:rotate(-2deg)"><img src="01/SEC-01-LF-SH-02.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:70%;transform:rotate(3deg)"><img src="01/SEC-01-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="right:3%;top:5%;transform:rotate(-2deg)"><img src="01/SEC-01-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:22%;transform:rotate(3deg)"><img src="01/SEC-01-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:42%;transform:rotate(-1deg)"><img src="01/SEC-01-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:58%;transform:rotate(2deg)"><img src="01/SEC-01-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:75%;transform:rotate(-3deg)"><img src="01/SEC-01-RF-BCK-03.png" alt=""></div>
+            </div>
+            <div class="color-block color-cool">
+                <div class="narrative">
+                    <span class="year-marker">01</span>
+                    <h2>Foundation Year</h2>
+                    <p class="period">FALL 2021 | FIRST SEMESTER</p>
+                    <p>Physical drawing and modeling formed the basis of my beginnings at Wentworth, teaching me to patiently see and think architecturally. I learned to feel my way through iteration and understand how forms and volumes begin to talk to each other to create space. Introducing sites became a focal point for grounding our designs and adding a sense of realism for how built projects impact our environment.</p>
+                    <p>The semester focused on the fundamentals, like understanding relationships between interior and exterior, how light moves through spaces, and what happens to entire designs when you change a single element. We worked at multiple scales with our models and drawings because there's something about making something with your hands that teaches you proportion and presence in a way no software can replicate. These projects were helping me learn the language of design and how to articulate an idea in my head onto paper.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/01-foundation.png" alt="Foundation Year"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 02: DIGITAL -->
+        <section class="chapter" data-year="2022">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:1%;top:2%;transform:rotate(-3deg)"><img src="02/SEC-02-LF-BCK-01.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:14%;transform:rotate(2deg)"><img src="02/SEC-02-LF-SH-01.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:28%;transform:rotate(-1deg)"><img src="02/SEC-02-LF-BCK-02.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:42%;transform:rotate(3deg)"><img src="02/SEC-02-LF-SH-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:56%;transform:rotate(-2deg)"><img src="02/SEC-02-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:70%;transform:rotate(1deg)"><img src="02/SEC-02-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:85%;transform:rotate(-3deg)"><img src="02/SEC-02-LF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:5%;transform:rotate(2deg)"><img src="02/SEC-02-RF-BCK-01.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:18%;transform:rotate(-2deg)"><img src="02/SEC-02-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:32%;transform:rotate(3deg)"><img src="02/SEC-02-RF-BCK-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:48%;transform:rotate(-1deg)"><img src="02/SEC-02-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:62%;transform:rotate(2deg)"><img src="02/SEC-02-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:76%;transform:rotate(-3deg)"><img src="02/SEC-02-RF-SH-03.jpeg" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:90%;transform:rotate(1deg)"><img src="02/SEC-02-RF-BCK-04.png" alt=""></div>
+            </div>
+            <div class="color-block color-warm">
+                <div class="narrative">
+                    <span class="year-marker">02</span>
+                    <h2>Digital Design</h2>
+                    <p class="period">SPRING 2022 | SECOND SEMESTER</p>
+                    <p>Moving to the computer felt like a natural progression because of my drafting background. Digital modeling and drawing were already ways I was comfortable visualizing spaces, but what I was eager to learn was how to represent these ideas in a way that would truly resonate with the people I would present them to.</p>
+                    <p>This semester opened up a different set of design possibilities. Where hand drawing had taught me patience and proportion, digital modeling let me test spatial relationships at full scale and explore iterations faster than ever before. Representational strategies were developed further and it opened up a new way to think creatively and express design spaces. Seeing designs on the site at these scales, paired with site visits and documentation, instilled in us the importance of the building-site-community relationship. The studios pushed us to think beyond orthographic views, to actually inhabit our designs, understand sightlines, and feel the experience of moving through space. It was the bridge between tactile models and the more complex interventions we would continue to expand upon.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/02-digital.png" alt="Digital Design"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 03: TECTONICS -->
+        <section class="chapter" data-year="2022">
+            <div class="side-images">
+                <div class="side-img w-xl" style="left:0%;top:1%;transform:rotate(-2deg)"><img src="03/SEC-03-LF-BCK-01.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:10%;transform:rotate(3deg)"><img src="03/SEC-03-LF-SH-01.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:18%;transform:rotate(-1deg)"><img src="03/SEC-03-LF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:26%;transform:rotate(2deg)"><img src="03/SEC-03-LF-SH-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:34%;transform:rotate(-3deg)"><img src="03/SEC-03-LF-BCK-03.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:42%;transform:rotate(1deg)"><img src="03/SEC-03-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:50%;transform:rotate(-2deg)"><img src="03/SEC-03-LF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:58%;transform:rotate(3deg)"><img src="03/SEC-03-LF-SH-04.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:66%;transform:rotate(-1deg)"><img src="03/SEC-03-LF-BCK-05.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:74%;transform:rotate(2deg)"><img src="03/SEC-03-LF-SH-05.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:82%;transform:rotate(-3deg)"><img src="03/SEC-03-LF-BCK-06.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:90%;transform:rotate(1deg)"><img src="03/SEC-03-LF-BCK-07.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:2%;transform:rotate(2deg)"><img src="03/SEC-03-RF-BCK-01.jpg" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:10%;transform:rotate(-3deg)"><img src="03/SEC-03-RF-SH-01.jpeg" alt=""></div>
+                <div class="side-img w-xl" style="right:0%;top:18%;transform:rotate(1deg)"><img src="03/SEC-03-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:28%;transform:rotate(-2deg)"><img src="03/SEC-03-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:38%;transform:rotate(3deg)"><img src="03/SEC-03-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:48%;transform:rotate(-1deg)"><img src="03/SEC-03-RF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:58%;transform:rotate(2deg)"><img src="03/SEC-03-RF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:68%;transform:rotate(-3deg)"><img src="03/SEC-03-RF-SH-04.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:78%;transform:rotate(1deg)"><img src="03/SEC-03-RF-BCK-05.jpg" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:88%;transform:rotate(-2deg)"><img src="03/SEC-03-RF-SH-05.png" alt=""></div>
+            </div>
+            <div class="color-block color-cool">
+                <div class="narrative">
+                    <span class="year-marker">03</span>
+                    <h2>Tectonics & Assemblies</h2>
+                    <p class="period">FALL 2022 | THIRD SEMESTER</p>
+                    <p>Being introduced to architectural history was perfectly timed as we pursued the next wave of studio projects. Studying big architects across design eras revealed how materials and structure carry knowledge, and the act of examining precedent showed how it inspires so many future designs. My studio explored diverse design challenges for both projects we had to do, whether for specific people or a specific material, this helped me grow my perspective on how critical good design is to the impact it leaves on end users. I realized how much depth and richness was embedded in historic projects for us to draw from.</p>
+                    <p>The coursework pushed us to be inspired while designing but still remain rooted in the structure that makes ideas come to life. Having two design challenges to tackle in the same semester forced us to approach each with the right amount of supporting analysis. Before we studied narratives and discourse surrounding architectural projects, we took time to understand why buildings matter and how design can evoke that understanding. These constraints rooted the projects in realism while offering enough space for creativity, thus ensuring we knew how buildings were actually put together. I'm grateful we built this understanding of materials deeply enough to intentionally blend them into our designs, letting the structure become the spectacle.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/03-tectonics.png" alt="Tectonics"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 04: NARRATIVES -->
+        <section class="chapter" data-year="2023" id="midpoint">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:1%;top:2%;transform:rotate(-2deg)"><img src="04/SEC-04-LF-BCK-01.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:12%;transform:rotate(3deg)"><img src="04/SEC-04-LF-SH-01.jpg" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:22%;transform:rotate(-1deg)"><img src="04/SEC-04-LF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:32%;transform:rotate(2deg)"><img src="04/SEC-04-LF-SH-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:42%;transform:rotate(-3deg)"><img src="04/SEC-04-LF-BCK-03.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:52%;transform:rotate(1deg)"><img src="04/SEC-04-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:62%;transform:rotate(-2deg)"><img src="04/SEC-04-LF-BCK-04.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:72%;transform:rotate(3deg)"><img src="04/SEC-04-LF-SH-04.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:82%;transform:rotate(-1deg)"><img src="04/SEC-04-LF-BCK-05.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:92%;transform:rotate(2deg)"><img src="04/SEC-04-LF-SH-05.jpg" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:4%;transform:rotate(2deg)"><img src="04/SEC-04-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:14%;transform:rotate(-3deg)"><img src="04/SEC-04-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:24%;transform:rotate(1deg)"><img src="04/SEC-04-RF-BCK-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:34%;transform:rotate(-2deg)"><img src="04/SEC-04-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:44%;transform:rotate(3deg)"><img src="04/SEC-04-RF-BCK-03.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:54%;transform:rotate(-1deg)"><img src="04/SEC-04-RF-SH-03.jpeg" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:64%;transform:rotate(2deg)"><img src="04/SEC-04-RF-BCK-04.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:74%;transform:rotate(-3deg)"><img src="04/SEC-04-RF-SH-04.jpeg" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:84%;transform:rotate(1deg)"><img src="04/SEC-04-RF-BCK-05.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:94%;transform:rotate(-2deg)"><img src="04/SEC-04-RF-SH-05.png" alt=""></div>
+            </div>
+            <div class="color-block color-warm">
+                <div class="narrative">
+                    <span class="year-marker">04</span>
+                    <h2>Discovering Narratives</h2>
+                    <p class="period">SPRING 2023 | FOURTH SEMESTER</p>
+                    <p>The artistic and abstract approach taken in this semester's projects helped me draw parallels to what architecture can do without us consciously knowing. I started weaving narrative into design, drawing connections between art and architecture. Whether it was symbolism or artistic approach, this year taught me that the stories we tell through construction are critical.</p>
+                    <p>This semester pushed toward more conceptual work. The precedents and concepts didn't just stem from solving functional problems, they came through creative expression of ideas in form. We'd take a musical composition, a poem, a cultural narrative, and translate it architecturally. The design briefs demanded work that articulated an impact on the area and mattered beyond its program. It was about understanding how architecture communicates, how a building's form and details carry meaning. Looking back, this is where design became less about what buildings do and more about what they say.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/04-narratives.png" alt="Narratives"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 05: COMMUNITIES -->
+        <section class="chapter" data-year="2023">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:2%;top:3%;transform:rotate(-2deg)"><img src="05/SEC-05-LF-BCK-01.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:16%;transform:rotate(3deg)"><img src="05/SEC-05-LF-SH-01.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:30%;transform:rotate(-1deg)"><img src="05/SEC-05-LF-BCK-02.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:44%;transform:rotate(2deg)"><img src="05/SEC-05-LF-SH-02.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:58%;transform:rotate(-3deg)"><img src="05/SEC-05-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:72%;transform:rotate(1deg)"><img src="05/SEC-05-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:86%;transform:rotate(-2deg)"><img src="05/SEC-05-LF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:5%;transform:rotate(2deg)"><img src="05/SEC-05-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:18%;transform:rotate(-3deg)"><img src="05/SEC-05-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:32%;transform:rotate(1deg)"><img src="05/SEC-05-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:46%;transform:rotate(-2deg)"><img src="05/SEC-05-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:60%;transform:rotate(3deg)"><img src="05/SEC-05-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:74%;transform:rotate(-1deg)"><img src="05/SEC-05-RF-SH-03.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:88%;transform:rotate(2deg)"><img src="05/SEC-05-RF-BCK-04.png" alt=""></div>
+            </div>
+            <div class="color-block color-cool">
+                <div class="narrative">
+                    <span class="year-marker">05</span>
+                    <h2>Concentrating on Communities</h2>
+                    <p class="period">FALL 2023 | FIFTH SEMESTER</p>
+                    <p>This semester entailed my first housing project, and the impact I wanted to create sparked an interest I would continue to pursue for many semesters to come. Real change happens at the neighborhood scale, where understanding every factor of a site like the community, hidden layers of context that let you design something that actually serves people beyond the plot of land the project sits on.</p>
+                    <p>The studio included a significant community outreach component. We didn't just analyze the site from maps and data; we talked to residents to understand their wants, needs, and perspectives. That boots-on-the-ground knowledge completely reframed how we approached design. We moved from thinking about a single building to thinking about how our intervention affected the entire neighborhood ecosystem. This experience made me notice the underutilized porosity happening in the neighborhood, and it felt like one of the three potential sites could serve as a catalyst for an interconnected community, one that thrives together. The neighborhood already had plans in place and contributed multiple rounds of design labs where neighbors came together to drive real change in the planning process. It was the moment I realized that architectural planning has real power, not just in how individual buildings are arranged, but in how those buildings activate and bolster areas that might be underserved.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/05-housing.png" alt="Housing"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 06: SUMMER -->
+        <section class="chapter" data-year="2024">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:1%;top:2%;transform:rotate(-3deg)"><img src="06/SEC-06-LF-BCK-01.jpg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:12%;transform:rotate(2deg)"><img src="06/SEC-06-LF-SH-01.jpg" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:24%;transform:rotate(-1deg)"><img src="06/SEC-06-LF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:36%;transform:rotate(3deg)"><img src="06/SEC-06-LF-SH-02.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:48%;transform:rotate(-2deg)"><img src="06/SEC-06-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:60%;transform:rotate(1deg)"><img src="06/SEC-06-LF-SH-03.jpg" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:72%;transform:rotate(-3deg)"><img src="06/SEC-06-LF-BCK-04.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:84%;transform:rotate(2deg)"><img src="06/SEC-06-LF-SH-04.jpg" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:4%;transform:rotate(2deg)"><img src="06/SEC-06-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:16%;transform:rotate(-2deg)"><img src="06/SEC-06-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:28%;transform:rotate(3deg)"><img src="06/SEC-06-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:40%;transform:rotate(-1deg)"><img src="06/SEC-06-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:52%;transform:rotate(2deg)"><img src="06/SEC-06-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:64%;transform:rotate(-3deg)"><img src="06/SEC-06-RF-SH-03.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:76%;transform:rotate(1deg)"><img src="06/SEC-06-RF-BCK-04.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:88%;transform:rotate(-2deg)"><img src="06/SEC-06-RF-SH-04.png" alt=""></div>
+            </div>
+            <div class="color-block color-warm">
+                <div class="narrative">
+                    <span class="year-marker">06</span>
+                    <h2>Intensive Summer</h2>
+                    <p class="period">SUMMER 2024 | SIXTH SEMESTER</p>
+                    <p>The summer studio pushed the boundaries mechanically and technically further than ever before. With a large emphasis on systems, envelope, and realism, we embarked in teams to tackle a design competition for Finland's capital. Working as a team on a foreign site, learning systems, reaching out to specialists, and we were left with nearly an entire project vision of what the building could be.</p>
+                    <p>The co-op experience prior to that summer was crucial. Continuing with the design firm I'd been working with gave me real-world context for what we were learning in studio. Before we tested ideas in prototype fragments that we would fully flesh through, understanding the project context was essential. That meant reaching out to MEP specialists, understanding load calculations, researching local building codes and material availability. Subsequent courses allowed us to push the realism of the energy and resources a building like this requires, as well as studying the passive and active systems we could utilize in our design. When thinking about heating systems, ventilation strategies, and structural approaches, they had to make sense for the site and the design vision. By the end, we'd developed comprehensive technical drawings and systems documentation alongside our design vision. It was very worthwhile to truly understand the building being crafted in studio. It was at such a deeper level too and was not just studying the spatial concepts, but it gave equal critical thought to the intricate assemblies of systems, code compliance, and technical decisions.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/06-summer.png" alt="Summer Studio"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 07: CAMPUS -->
+        <section class="chapter" data-year="2024">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:2%;top:3%;transform:rotate(-2deg)"><img src="07/SEC-07-LF-BCK-01.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:16%;transform:rotate(3deg)"><img src="07/SEC-07-LF-SH-01.jpg" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:30%;transform:rotate(-1deg)"><img src="07/SEC-07-LF-BCK-02.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:44%;transform:rotate(2deg)"><img src="07/SEC-07-LF-SH-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:58%;transform:rotate(-3deg)"><img src="07/SEC-07-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:72%;transform:rotate(1deg)"><img src="07/SEC-07-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:86%;transform:rotate(-2deg)"><img src="07/SEC-07-LF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:5%;transform:rotate(2deg)"><img src="07/SEC-07-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:18%;transform:rotate(-3deg)"><img src="07/SEC-07-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:32%;transform:rotate(1deg)"><img src="07/SEC-07-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:46%;transform:rotate(-2deg)"><img src="07/SEC-07-RF-SH-02.jpeg" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:60%;transform:rotate(3deg)"><img src="07/SEC-07-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:74%;transform:rotate(-1deg)"><img src="07/SEC-07-RF-SH-03.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:88%;transform:rotate(2deg)"><img src="07/SEC-07-RF-BCK-04.png" alt=""></div>
+            </div>
+            <div class="color-block color-cool">
+                <div class="narrative">
+                    <span class="year-marker">07</span>
+                    <h2>Campus Planning</h2>
+                    <p class="period">FALL 2024 | SEVENTH SEMESTER</p>
+                    <p>Masterplanning through the lens of an ecological campus town was our assignment for this semester. Working with Perkins + Will, we learned to gather resources from online mapping and study the forest and landscape with reverence, envisioning a design to restore rather than disrupt. Seeing the strategies real urban planning employs for large-scale efforts like this changed how I see what's possible.</p>
+                    <p>The project asked us to think at the masterplan scale, so not just a single site, but a coordinated series of interventions across a heavily wooded campus. We developed extensive mapping systems to understand ecology, circulation, community use patterns, and natural features. What excited us most was the opportunity to restore environmental systems. We proposed to daylight rivers that had been buried, designed around mature forest ecosystems, and created campus spaces that enhanced students' connection with the natural landscape rather than consuming it. We held an intensive site visit that offered us direct experience of how students and residents actually used the campus. That feedback guided our masterplan. It taught me that at the urban scale, your role shifts from designer to facilitator, you are orchestrating a multitude of stakeholder voices into a cohesive vision.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/07-campus.png" alt="Campus"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 08: EUROPE -->
+        <section class="chapter" data-year="2025">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:1%;top:3%;transform:rotate(-2deg)"><img src="08/SEC-08-LF-BCK-01.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:16%;transform:rotate(3deg)"><img src="08/SEC-08-LF-SH-01.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:30%;transform:rotate(-1deg)"><img src="08/SEC-08-LF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:44%;transform:rotate(2deg)"><img src="08/SEC-08-LF-SH-02.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:58%;transform:rotate(-3deg)"><img src="08/SEC-08-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:72%;transform:rotate(1deg)"><img src="08/SEC-08-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:86%;transform:rotate(-2deg)"><img src="08/SEC-08-LF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:5%;transform:rotate(2deg)"><img src="08/SEC-08-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:18%;transform:rotate(-3deg)"><img src="08/SEC-08-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:32%;transform:rotate(1deg)"><img src="08/SEC-08-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:46%;transform:rotate(-2deg)"><img src="08/SEC-08-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:60%;transform:rotate(3deg)"><img src="08/SEC-08-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:74%;transform:rotate(-1deg)"><img src="08/SEC-08-RF-SH-03.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:88%;transform:rotate(2deg)"><img src="08/SEC-08-RF-BCK-04.png" alt=""></div>
+            </div>
+            <div class="color-block color-warm">
+                <div class="narrative">
+                    <span class="year-marker">08</span>
+                    <h2>Traveling Designer</h2>
+                    <p class="period">SPRING 2025 | STUDY ABROAD</p>
+                    <p>This opportunity for an immersive traveling experience was quite unmatched and shifted my entire perspective on how people settle and use space. Studying across Europe changed how I see depth in architecture. The traveling experience and everything it entailed, like facilitating travel, keeping up with studio, immersing myself in unfamiliar cultures, did remain the highlight. Getting to work in the heart of another architectural culture made me even more passionate about what design can truly be, wherever you are.</p>
+                    <p>The studio focused specifically on Italian made products and the protected, artisanal processes behind them. We studied how traditional craftsmanship could become the basis for architectural design. Visiting factories and meeting makers gave us an understanding of the philosophy behind quality and care in production. Then we designed an architectural campus that celebrated these processes. The travel component was essential, as we visited the regions, walked through craft districts, and began to map the cultural and economic ecosystems that made these products possible. It wasn't just about designing around a theme; it was about absorbing an entirely different approach to how humans make things within curated spaces. That semester showed me that architecture exists within larger cultural, economic, and craft traditions. The depth of European architecture—its history layered into every street, its commitment to craft and detail, this fundamentally changed my perspective on craftsmanship and design agency.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/08-europe.png" alt="Europe"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 09: THESIS -->
+        <section class="chapter" data-year="2026" id="current">
+            <div class="side-images">
+                <div class="side-img w-lg" style="left:1%;top:2%;transform:rotate(-2deg)"><img src="09/SEC-09-LF-BCK-01.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:10%;transform:rotate(3deg)"><img src="09/SEC-09-LF-SH-01.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:20%;transform:rotate(-1deg)"><img src="09/SEC-09-LF-BCK-02.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:30%;transform:rotate(2deg)"><img src="09/SEC-09-LF-SH-02.jpeg" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:40%;transform:rotate(-3deg)"><img src="09/SEC-09-LF-BCK-03.png" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:50%;transform:rotate(1deg)"><img src="09/SEC-09-LF-SH-03.png" alt=""></div>
+                <div class="side-img w-lg" style="left:2%;top:60%;transform:rotate(-2deg)"><img src="09/SEC-09-LF-BCK-04.png" alt=""></div>
+                <div class="side-img w-md" style="left:5%;top:70%;transform:rotate(3deg)"><img src="09/SEC-09-LF-SH-04.png" alt=""></div>
+                <div class="side-img w-lg" style="left:1%;top:80%;transform:rotate(-1deg)"><img src="09/SEC-09-LF-BCK-05.jpeg" alt=""></div>
+                <div class="side-img w-md" style="left:6%;top:90%;transform:rotate(2deg)"><img src="09/SEC-09-LF-SH-05.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:4%;transform:rotate(2deg)"><img src="09/SEC-09-RF-BCK-01.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:12%;transform:rotate(-3deg)"><img src="09/SEC-09-RF-SH-01.png" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:22%;transform:rotate(1deg)"><img src="09/SEC-09-RF-BCK-02.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:32%;transform:rotate(-2deg)"><img src="09/SEC-09-RF-SH-02.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:42%;transform:rotate(3deg)"><img src="09/SEC-09-RF-BCK-03.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:52%;transform:rotate(-1deg)"><img src="09/SEC-09-RF-SH-03.jpeg" alt=""></div>
+                <div class="side-img w-md" style="right:5%;top:62%;transform:rotate(2deg)"><img src="09/SEC-09-RF-BCK-04.png" alt=""></div>
+                <div class="side-img w-lg" style="right:2%;top:72%;transform:rotate(-3deg)"><img src="09/SEC-09-RF-SH-04.png" alt=""></div>
+                <div class="side-img w-md" style="right:4%;top:82%;transform:rotate(1deg)"><img src="09/SEC-09-RF-BCK-05.png" alt=""></div>
+                <div class="side-img w-lg" style="right:1%;top:92%;transform:rotate(-2deg)"><img src="09/SEC-09-RF-SH-05.png" alt=""></div>
+            </div>
+            <div class="color-block color-accent">
+                <div class="narrative">
+                    <span class="year-marker">09</span>
+                    <h2>Thesis Year</h2>
+                    <p class="period">FALL 2025 – SPRING 2026 | MASTERS YEAR</p>
+                    <p>While still ongoing, I am trying to push the limits of how I have studied urban spaces and see what kind of meaningful designs I can extract from this deeper analysis for my thesis year. The global research studio allowed me to travel to the United Arab Emirates to study their public realm. Dubai and Abu Dhabi taught me how humans adapt and innovate against all odds. The architectural and urban strategies I experienced there are rooted in traditional innovative thinking and are now turning into a booming global hub. I've continued exploring water as a design element and the public realm, and in the Emirates, no idea seems too outlandish.</p>
+                    <p>What struck me most was how the region approaches bold, experimental design that's willing to rethink traditional patterns for the modern day. I became fascinated with how water, in a region of scarcity, could become a powerful design and social tool. For my thesis project, I developed a masterplan for Dubai's Design District that centers on water specifically, proposing a programmatic creek system that restores the area's historical maritime connections while creating shaded public spaces, improving microclimates, and bringing design communities a refreshed identity for this fragmented district. It's ambitious, but studying how the Emirates approach challenges taught me that scale and audacity in design aren't problems, they're opportunities. The thesis work I'm continuing to develop now explores water as design infrastructure, but also how masterplanning can restore ecological systems and how social systems can be rectified even within the context of Boston.</p>
+                </div>
+                <div class="inline-image"><img src="Images-Inline/09-thesis.png" alt="Thesis"></div>
+            </div>
+        </section>
+
+    </main>
+    <footer class="footer">
+        <h2>Let's Connect</h2>
+        <div class="footer-links"><a href="mailto:asackerg@wit.edu">asackerg@wit.edu</a><a href="https://linkedin.com/in/gabrielasacker">LinkedIn</a></div>
+        <p class="copyright">© 2026 Gabriel G. Asacker</p>
+    </footer>
+    <div class="lightbox"><div class="lightbox-backdrop"></div><div class="lightbox-content"><img src="" alt=""></div></div>
+    <script>
+        // Dynamic year marker
+        const navYear = document.querySelector('.nav-year');
+        const chapters = document.querySelectorAll('.chapter[data-year]');
+        
+        const yearObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const year = entry.target.getAttribute('data-year');
+                    if (year && navYear) {
+                        navYear.textContent = year;
+                    }
+                }
+            });
+        }, { 
+            rootMargin: '-30% 0px -30% 0px',
+            threshold: 0
+        });
+        
+        chapters.forEach(chapter => yearObserver.observe(chapter));
+        
+        // Lightbox for side images
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        
+        document.querySelectorAll('.side-img').forEach(img => {
+            img.addEventListener('click', () => {
+                const imgEl = img.querySelector('img');
+                if (imgEl) {
+                    lightboxImg.src = imgEl.src;
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+        
+        lightbox.querySelector('.lightbox-backdrop').addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
